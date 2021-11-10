@@ -7,14 +7,14 @@ from catsim.simulation import Stopper
 class MaxItemStopper(Stopper):
     """Stopping criterion for maximum number of items in a test
 
-    :param max_itens: the maximum number of items in the test"""
+    :param max_items: the maximum number of items in the test"""
 
     def __str__(self):
         return 'Maximum Item Number Initializer'
 
-    def __init__(self, max_itens: int):
+    def __init__(self, max_items: int):
         super(MaxItemStopper, self).__init__()
-        self._max_itens = max_itens
+        self._max_items = max_items
 
     def stop(self, index: int = None, administered_items: numpy.ndarray = None, **kwargs) -> bool:
         """Checks whether the test reached its stopping criterion for the given user
@@ -29,15 +29,15 @@ class MaxItemStopper(Stopper):
         if administered_items is None:
             administered_items = self.simulator.items[self.simulator.administered_items[index]]
 
-        n_itens = administered_items.shape[0]
-        if n_itens > self._max_itens:
+        n_items = administered_items.shape[0]
+        if n_items > self._max_items:
             raise ValueError(
                 'More items than permitted were administered: {0} > {1}'.format(
-                    n_itens, self._max_itens
+                    n_items, self._max_items
                 )
             )
 
-        return n_itens == self._max_itens
+        return n_items == self._max_items
 
 
 class MinErrorStopper(Stopper):

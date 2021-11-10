@@ -50,6 +50,7 @@ def icc_hpc(theta: float, items: numpy.ndarray) -> numpy.ndarray:
     :returns: an array of all item characteristic functions, given the current ``theta``"""
     a, b, c, d = _split_params(items)
 
+    # just the P(theta|a, b, c, d) of 4PL models
     return numexpr.evaluate('c + ((d - c) / (1 + exp((-a * (theta - b)))))')
 
 

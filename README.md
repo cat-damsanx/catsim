@@ -8,31 +8,41 @@ Computerized adaptive tests are educational evaluations, usually taken by examin
 
 *catsim* allows users to simulate the application of a computerized adaptive test, given a sample of examinees, represented by their proficiency levels, and an item bank, represented by their parameters according to some Item Response Theory model.
 
-## Installation
+<!-- ## Installation
 
-Install it using `pip install catsim`.
+Install it using `pip install catsim`. -->
 
 ## Important links
 
 - Official source code repo: <https://github.com/douglasrizzo/catsim>
-- HTML documentation (stable release):
-    <http://douglasrizzo.github.io/catsim>
+- HTML documentation (stable release): <http://douglasrizzo.github.io/catsim>
 - Issue tracker: <https://github.com/douglasrizzo/catsim/issues>
 
 ## Dependencies
 
-catsim depends on the latest versions of NumPy, SciPy, Matplotlib and
-scikit-learn, which are automatically installed from pip.
-
-To run the tests, you'll need to install the testing requirements
-pip install catsim[testing].
-
-To generate the documentation, Sphinx and its dependencies are needed.
+- In the `requirements.txt` file.
 
 ## Files structures
 
+### catsim/initialization.py
+
+- Randomly initializes the first estimate of an examee's proficiency with `RandomInitializer`, the distribution is either `normal` or `uniform`.
+- Initializes fix point with `FixedPointInitializer`.
+
+### catsim/selection.py
+
+- Select item by Maximum information with `MaxInfoSelector`.
+- Select item in a linear order (not present item) with `LinearSelector`.
+- Randomly select item with `RandomSelector`.
+
 ### catsim/estimation.py
 
-- Maximum log-likelihood function using Hill Climbing
-- Minimize negative log-likelihood function using Differential Evolution
-- Estimate using Bayesian Estimator catsim -- Computerized Adaptive
+- Maximum log-likelihood function with `HillClimbingEstimator`
+- Minimize negative log-likelihood function with `DifferentialEvolutionEstimator`
+- Ability estimation using `BayesianEstimator`
+
+### catsim/stopping.py
+
+- Maximum length item stop rule with `MaxItemStopper`.
+- Minimum error for ability estimation with `MinErrorStopper`.
+- Minimum confidence that ability estimated exceeds a threshold `MinConfidenceStopper`.
