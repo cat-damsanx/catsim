@@ -41,6 +41,8 @@ Install it using `pip install catsim`. -->
 - Maximum information stratification (MIS) with `MaxInfoStratificationSelector`.
 - Maximum information stratification with block with `MaxInfoBBlockingSelector`.
 - 5-4-3-2-1 Selector with `The54321Selector`.
+- Randomsque Selection with `RandomesqueSelector`.
+- Interval integration selection with `IntervalIntegrationSelector`.
 
 ### catsim/estimation.py
 
