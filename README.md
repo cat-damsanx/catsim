@@ -1,5 +1,4 @@
 # catsim -- Computerized Adaptive Testing Simulator
----
 
 ![image](https://travis-ci.org/douglasrizzo/catsim.svg?branch=master%0A%20:target:%20https://travis-ci.org/douglasrizzo/catsim:%0A%20:alt:%20Build%20Status)
 
@@ -14,7 +13,6 @@
 ![image](https://zenodo.org/badge/doi/10.5281/zenodo.46420.svg%0A%20:target:%20http://dx.doi.org/10.5281/zenodo.46420%0A%20:alt:%20Digital%20Object%20Identifier)
 
 ## Quick start
------------
 
 **catsim** is a computerized adaptive testing simulator written in
 Python 3.4. It allow for the simulation of computerized adaptive tests,
@@ -59,9 +57,9 @@ pip install catsim[testing].
 
 To generate the documentation, Sphinx and its dependencies are needed.
 
-Files structures ============
+## Files structures
 
-catsim/estimation.py
+### catsim/estimation.py
 
 - Maximum log-likelihood function using Hill Climbing
 - Minimize negative log-likelihood function using Differential Evolution
