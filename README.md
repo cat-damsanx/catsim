@@ -34,6 +34,13 @@ Install it using `pip install catsim`. -->
 - Select item by Maximum information with `MaxInfoSelector`.
 - Select item in a linear order (not present item) with `LinearSelector`.
 - Randomly select item with `RandomSelector`.
+- Cluster-based Item selection with `ClusterSelector`.
+- Stratified selection with `StratifiedSelector`.
+- Alpha Stratified selection method with `AStratifiedSelector`.
+- Alpha Stratified selection and divide to block with `AStratifiedBBlockingSelector`.
+- Maximum information stratification (MIS) with `MaxInfoStratificationSelector`.
+- Maximum information stratification with block with `MaxInfoBBlockingSelector`.
+- 5-4-3-2-1 Selector with `The54321Selector`.
 
 ### catsim/estimation.py
 
