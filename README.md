@@ -27,7 +27,7 @@ Install it using `pip install catsim`. -->
 ### catsim/initialization.py
 
 - Randomly initializes the first estimate of an examee's proficiency with `RandomInitializer`, the distribution is either `normal` or `uniform`.
-- Initializes fix point with `FixedPointInitializer`.
+- Initializes fixed point with `FixedPointInitializer`.
 
 ### catsim/selection.py
 
