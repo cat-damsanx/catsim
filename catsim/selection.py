@@ -774,15 +774,15 @@ class RandomesqueSelector(Selector):
             est_theta = self.simulator.latest_estimations[index]
 
         # sort item indexes by their information value and remove indexes of administered items
-        organized_items = [
+        organized_items = np.array([
             x for x in (-irt.inf_hpc(est_theta, items)).argsort() if x not in administered_items
-        ]
+        ])
 
-        if len(organized_items) == 0:
+        if organized_items.shape[0] == 0:
             warn('There are no more items to apply.')
             return None
 
-        return numpy.random.choice(list(organized_items)[:self._bin_size])
+        return numpy.random.choice(organized_items[:self._bin_size])
 
 
 class IntervalIntegrationSelector(Selector):
@@ -837,7 +837,7 @@ class IntervalIntegrationSelector(Selector):
             est_theta = self.simulator.latest_estimations[index]
 
         # sort item indexes by the integral of the information function and remove indexes of administered items
-        organized_items = [
+        organized_items = np.array([
             x for x in numpy.array(
                 [
                     quad(
@@ -848,10 +848,10 @@ class IntervalIntegrationSelector(Selector):
                     )[0] for item in items
                 ]
             ).argsort() if x not in administered_items
-        ]
+        ])
 
-        if len(organized_items) == 0:
+        if organized_items.shape[0] == 0:
             warn('There are no more items to apply.')
             return None
 
-        return list(organized_items)[0]
+        return organized_items[0]

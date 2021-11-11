@@ -1,10 +1,7 @@
 """Functions used specifically during the application/simulation of computerized adaptive tests."""
 
 import operator
-
 import numpy
-import random
-
 from catsim import irt
 
 
@@ -46,7 +43,8 @@ def bias(actual: list, predicted: list):
     :returns: the bias between the predicted values and actual values.
     """
     if len(actual) != len(predicted):
-        raise ValueError('actual and predicted vectors need to be the same size')
+        raise ValueError(
+            'actual and predicted vectors need to be the same size')
     return numpy.mean(list(map(operator.sub, predicted, actual)))
 
 
@@ -65,7 +63,8 @@ def mse(actual: list, predicted: list):
     :returns: the mean squared error between the predicted values and actual values.
     """
     if len(actual) != len(predicted):
-        raise ValueError('actual and predicted vectors need to be the same size')
+        raise ValueError(
+            'actual and predicted vectors need to be the same size')
     return numpy.mean([x * x for x in list(map(operator.sub, predicted, actual))])
 
 
@@ -84,7 +83,8 @@ def rmse(actual: list, predicted: list):
     :returns: the root mean squared error between the predicted values and actual values.
     """
     if len(actual) != len(predicted):
-        raise ValueError('actual and predicted vectors need to be the same size')
+        raise ValueError(
+            'actual and predicted vectors need to be the same size')
     return numpy.sqrt(mse(actual, predicted))
 
 
@@ -145,7 +145,8 @@ def generate_item_bank(n: int, itemtype: str = '4PL', corr: float = 0):
 
     means = [0, 1.2]
     stds = [1, 0.25]
-    covs = [[stds[0]**2, stds[0] * stds[1] * corr], [stds[0] * stds[1] * corr, stds[1]**2]]
+    covs = [[stds[0]**2, stds[0] * stds[1] * corr],
+            [stds[0] * stds[1] * corr, stds[1]**2]]
 
     b, a = numpy.random.multivariate_normal(means, covs, n).T
 
@@ -172,7 +173,7 @@ def generate_item_bank(n: int, itemtype: str = '4PL', corr: float = 0):
 
 
 def random_response_vector(size: int):
-    return [bool(random.getrandbits(1)) for _ in range(size)]
+    return numpy.random.binomial(1, 0.5, size=size)
 
 
 if __name__ == '__main__':

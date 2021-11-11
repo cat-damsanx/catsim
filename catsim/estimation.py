@@ -174,6 +174,7 @@ class DifferentialEvolutionEstimator(Estimator):
 
     def __init__(self, bounds: tuple):
         super(DifferentialEvolutionEstimator, self).__init__()
+        self._bounds = bounds
         self._lower_bound = min(bounds)
         self._upper_bound = max(bounds)
         self._evaluations = 0
@@ -199,6 +200,10 @@ class DifferentialEvolutionEstimator(Estimator):
 
         :returns: average number of function evaluations"""
         return self._evaluations / self._calls
+
+    def _bound_estimate(self, estimate):
+        lbound, ubound = self._bounds
+        return min(max(estimate, lbound), ubound)
 
     def estimate(
         self,
@@ -240,7 +245,7 @@ class DifferentialEvolutionEstimator(Estimator):
 
         self._evaluations = res.nfev
 
-        return res.x[0]
+        return self._bound_estimate(res.x[0])
 
 class BayesianEstimator(Estimator):
     """Estimator that uses Bayesian estimation for ability estimation
