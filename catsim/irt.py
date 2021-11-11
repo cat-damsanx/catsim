@@ -262,9 +262,7 @@ def log_likelihood(
 
     ps = icc_hpc(est_theta, administered_items)
 
-    # note here for improve later using numexpr
-    query = numpy.where(response_vector, numpy.log(ps), numpy.log(1 - ps))
-    ll = numexpr.evaluate('sum(query)')
+    ll = numexpr.evaluate('sum(where(response_vector, log(ps), log(1 - ps)))')
 
     return ll
 
