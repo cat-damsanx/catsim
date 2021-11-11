@@ -686,7 +686,7 @@ class The54321Selector(FiniteSelector):
         self,
         index: int = None,
         items: numpy.ndarray = None,
-        administered_items: list = None,
+        administered_items: numpy.ndarray = None,
         est_theta: float = None,
         **kwargs
     ) -> int:
@@ -711,13 +711,13 @@ class The54321Selector(FiniteSelector):
             est_theta = self.simulator.latest_estimations[index]
 
         # sort item indexes by their information value and remove indexes of administered items
-        organized_items = [
+        organized_items = numpy.array([
             x for x in reversed(irt.inf_hpc(est_theta, items).argsort()) if x not in administered_items
-        ]
+        ])
 
-        bin_size = self._test_size - len(administered_items)
+        bin_size = self._test_size - administered_items.shape[0]
 
-        if len(organized_items) == 0:
+        if organized_items.shape[0] == 0:
             warn('There are no more items to apply.')
             return None
 
