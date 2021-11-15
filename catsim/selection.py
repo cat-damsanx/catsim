@@ -47,6 +47,7 @@ class MaxInfoSelector(Selector):
 
         valid_indexes = [x for x in range(items.shape[0]) if x not in administered_items]
         inf_values = irt.inf_hpc(est_theta, items[valid_indexes])
+
         valid_indexes = [
             item_index for (inf_value, item_index) in
             sorted(zip(inf_values, valid_indexes), key=lambda pair: pair[0], reverse=True)
@@ -57,6 +58,62 @@ class MaxInfoSelector(Selector):
             return None
 
         return valid_indexes[0]
+
+
+class MaxInfoGroupWithRandomSelector(Selector):
+    """Selector that returns the one that randomly choice from a set of equally information
+     non-administered item with maximum information, given an estimated theta"""
+
+    def __init__(self):
+        super().__init__()
+
+    def __str__(self):
+        return 'Maximum Information Selector'
+
+    def select(
+        self,
+        index: int = None,
+        items: numpy.ndarray = None,
+        administered_items: list = None,
+        est_theta: float = None,
+        **kwargs
+    ) -> int:
+        """Returns the index of the next item to be administered.
+
+        :param index: the index of the current examinee in the simulator.
+        :param items: a matrix containing item parameters in the format that `catsim` understands
+                      (see: :py:func:`catsim.cat.generate_item_bank`)
+        :param administered_items: a list containing the indexes of items that were already administered
+        :param est_theta: a float containing the current estimated proficiency
+        :returns: index of the next item to be applied or `None` if there are no more items in the item bank.
+        """
+        if (index is None or self.simulator is None
+            ) and (items is None or administered_items is None or est_theta is None):
+            raise ValueError(
+                'Either pass an index for the simulator or all of the other optional parameters to use this component independently.'
+            )
+
+        if items is None and administered_items is None and est_theta is None:
+            items = self.simulator.items
+            administered_items = self.simulator.administered_items[index]
+            est_theta = self.simulator.latest_estimations[index]
+
+        valid_indexes = [x for x in range(items.shape[0]) if x not in administered_items]
+        inf_values = irt.inf_hpc(est_theta, items[valid_indexes])
+        # print out that list
+        inf_sorted = numpy.array(sorted(inf_values, reverse=True))
+        nums_equally = (inf_sorted == inf_sorted[0]).sum()
+        valid_indexes = [
+            item_index for (inf_value, item_index) in
+            sorted(zip(inf_values, valid_indexes), key=lambda pair: pair[0], reverse=True)
+        ][:nums_equally] # select that all value equal to maximum information value 
+        print("Number of item that equal to maximum:", nums_equally)
+
+        if len(valid_indexes) == 0:
+            warn('There are no more items to be applied.')
+            return None
+
+        return numpy.random.choice(valid_indexes)
 
 
 class LinearSelector(FiniteSelector):
@@ -686,7 +743,7 @@ class The54321Selector(FiniteSelector):
         self,
         index: int = None,
         items: numpy.ndarray = None,
-        administered_items: numpy.ndarray = None,
+        administered_items: list = None,
         est_theta: float = None,
         **kwargs
     ) -> int:
@@ -711,13 +768,13 @@ class The54321Selector(FiniteSelector):
             est_theta = self.simulator.latest_estimations[index]
 
         # sort item indexes by their information value and remove indexes of administered items
-        organized_items = numpy.array([
+        organized_items = [
             x for x in reversed(irt.inf_hpc(est_theta, items).argsort()) if x not in administered_items
-        ])
+        ]
 
-        bin_size = self._test_size - administered_items.shape[0]
+        bin_size = self._test_size - len(administered_items)
 
-        if organized_items.shape[0] == 0:
+        if len(organized_items) == 0:
             warn('There are no more items to apply.')
             return None
 
@@ -774,15 +831,15 @@ class RandomesqueSelector(Selector):
             est_theta = self.simulator.latest_estimations[index]
 
         # sort item indexes by their information value and remove indexes of administered items
-        organized_items = np.array([
+        organized_items = [
             x for x in (-irt.inf_hpc(est_theta, items)).argsort() if x not in administered_items
-        ])
+        ]
 
-        if organized_items.shape[0] == 0:
+        if len(organized_items) == 0:
             warn('There are no more items to apply.')
             return None
 
-        return numpy.random.choice(organized_items[:self._bin_size])
+        return numpy.random.choice(list(organized_items)[:self._bin_size])
 
 
 class IntervalIntegrationSelector(Selector):
@@ -837,7 +894,7 @@ class IntervalIntegrationSelector(Selector):
             est_theta = self.simulator.latest_estimations[index]
 
         # sort item indexes by the integral of the information function and remove indexes of administered items
-        organized_items = np.array([
+        organized_items = [
             x for x in numpy.array(
                 [
                     quad(
@@ -848,10 +905,10 @@ class IntervalIntegrationSelector(Selector):
                     )[0] for item in items
                 ]
             ).argsort() if x not in administered_items
-        ])
+        ]
 
-        if organized_items.shape[0] == 0:
+        if len(organized_items) == 0:
             warn('There are no more items to apply.')
             return None
 
-        return organized_items[0]
+        return list(organized_items)[0]
