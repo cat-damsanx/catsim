@@ -36,6 +36,7 @@ Install it using `pip install catsim`. -->
 ### catsim/selection.py
 
 - Select item by Maximum information with `MaxInfoSelector`.
+- Select item that random from a set of item have information equally to the maximum one with `MaxInfoGroupWithRandomSelector`
 - Select item in a linear order (not present item) with `LinearSelector`.
 - Randomly select item with `RandomSelector`.
 - Cluster-based Item selection with `ClusterSelector`.
